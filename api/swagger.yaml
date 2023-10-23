@@ -1,0 +1,103 @@
+basePath: /v1
+definitions:
+  v1.Distance:
+    properties:
+      kilometers:
+        type: number
+    type: object
+  v1.Error:
+    properties:
+      message:
+        type: string
+    type: object
+  v1.GeoObject:
+    properties:
+      id:
+        type: string
+    type: object
+  v1.GeoObjectPostRequest:
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+    required:
+    - latitude
+    - longitude
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  title: PT-API Service
+  version: 0.1.0
+paths:
+  /geo-object:
+    post:
+      consumes:
+      - application/json
+      description: Method for geo object creation
+      operationId: GeoObjectPost
+      parameters:
+      - description: GeoObject params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/v1.GeoObjectPostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.GeoObject'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Error'
+      summary: Create geo object
+      tags:
+      - geo_object_api
+  /geo-object/{id}/distance:
+    get:
+      description: Get distance between stored GeoObject and provided coordinates
+      operationId: GeoObjectDistanceGet
+      parameters:
+      - description: GeoObject ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: latitude
+        in: query
+        name: latitude
+        required: true
+        type: string
+      - description: longitude
+        in: query
+        name: longitude
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.Distance'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.Error'
+      summary: Get distance
+      tags:
+      - geo_object_api
+swagger: "2.0"
